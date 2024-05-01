@@ -1,0 +1,13 @@
+/* nested tag */
+
+$value-0: 0px;
+$value_10: 10px;
+
+body {
+  margin: $value-0;
+  padding: $value-0;
+
+  p {
+    margin: $value_10;
+  }
+}

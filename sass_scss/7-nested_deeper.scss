@@ -1,0 +1,15 @@
+/* nested deeper */
+
+$big-text: 16px;
+$medium-text: 14px;
+$small-text: 12px;
+
+body {
+    font-size: $medium-text;
+    h1 {
+        font-size: $big-text;
+        &.smaller {
+            font-size: $small-text;
+        }
+    }
+}

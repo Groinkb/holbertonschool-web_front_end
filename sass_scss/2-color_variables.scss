@@ -1,0 +1,17 @@
+/* grey text and background */
+
+$grey-text: #3D3D3D;
+$grey-background: #6D6D6D;
+
+body {
+    color: $grey-text;
+    background-color: $grey-background;
+}
+
+p {
+    color: $grey-text;
+}
+
+h2 {
+    background-color: $grey-background;
+}

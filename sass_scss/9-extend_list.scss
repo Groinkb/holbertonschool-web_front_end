@@ -1,0 +1,19 @@
+/* extend list */
+
+$text: 12px;
+$color-green: #00FF00;
+$color-red: #FF0000;
+
+.info {
+    font-size: $text;
+}
+
+.success {
+    @extend .info;
+    color: $color-green;
+}
+
+.warning {
+    @extend .info;
+    color: $color-red;
+}

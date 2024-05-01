@@ -1,0 +1,12 @@
+/* nested child */
+
+$grey-text: #3D3D3D;
+$red-text: #FF0000;
+
+body {
+    color: $grey-text;
+
+    > .red {
+        color: $red-text;
+    }
+}

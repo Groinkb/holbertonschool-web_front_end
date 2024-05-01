@@ -1,0 +1,17 @@
+/* mixin margins */
+
+$marge: 10px;
+$large-marge: 15px;
+
+@mixin set-margins($left, $right) {
+    margin-left: $left;
+    margin-right: $right;
+}
+
+body {
+    @include set-margins($marge, $marge);
+}
+
+div {
+    @include set-margins($large-marge, $large-marge);
+}

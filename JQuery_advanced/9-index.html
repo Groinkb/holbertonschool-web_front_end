@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Task 0</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+        .pagination {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .pagination .active {
+            font-weight: bold;
+        }
+		.loading {
+				opacity: 0.2;
+			}
+    </style>
+    <script type="application/javascript">
+        $(document).ready(function () {
+
+            function createSearchForm() {
+                $('body').append('<input type="text">');
+                $('body').append('<button type="button" class="submitbutton">Submit</button>');
+                $('body').append('<ul></ul>');
+                $('body').append('<ul class="pagination"></ul>');
+
+                $(document).on('click', '.submitbutton', function () {
+                    const input = $('input').first().val();
+                    queryWikipedia(input);
+                });
+            }
+
+            function addNewArticle(id, title, snippet) {
+                const li = $('<li></li>');
+                const p1 = $('<p></p>');
+                const span = $('<span></span>').text(`${id} - `);
+                const b = $('<b></b>').text(title);
+                p1.append(span).append(b);
+                const p2 = $('<p></p>').html(snippet);
+                li.append(p1).append(p2);
+                $('ul').first().append(li);
+            }
+
+            function queryWikipedia(search, offset = 0) {
+                const url = 'https://en.wikipedia.org/w/api.php';
+                const data = {
+                    action: 'query',
+                    list: 'search',
+                    srsearch: search,
+                    format: 'json',
+                    sroffset: offset,
+                    origin: '*'
+                };
+
+				displayLoading(true);
+
+                $.ajax({
+                    url: url,
+                    data: data,
+                    dataType: 'json',
+                    success: function (response) {
+                        $('ul').first().empty();
+                        const results = response.query.search;
+                        const totalHits = response.query.searchinfo.totalhits;
+                        results.forEach(result => {
+                            addNewArticle(result.pageid, result.title, result.snippet);
+                        });
+                        buildPagination(totalHits, 10, offset);
+						displayLoading(false);
+                    },
+                    error: function () {
+                        $('ul').first().append('<li>Something went wrong while fetching data from Wikipedia.</li>');
+						displayLoading(false);
+                    }
+                });
+            }
+
+            function buildPagination(numberOfItems, itemsPerPage, currentOffset) {
+                const totalPages = Math.ceil(numberOfItems / itemsPerPage);
+                const currentPage = Math.floor(currentOffset / itemsPerPage) + 1;
+                const paginationUl = $('.pagination');
+                paginationUl.empty();
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const li = $('<li></li>').text(i);
+                    li.css({
+                        'cursor': 'pointer',
+                        'margin-left': '10px'
+                    });
+
+                    if (i === currentPage) {
+                        li.addClass('active');
+                    }
+
+                    li.on('click', function () {
+                        queryWikipedia($('input').first().val(), (i - 1) * itemsPerPage);
+                    });
+
+                    paginationUl.append(li);
+                }
+            }
+
+			function displayLoading(loading) {
+				const firstUl = $('ul').first();
+				if (loading === true) {
+					firstUl.wrap("<div class='loading'></div>");
+				}
+				else {
+					firstUl.unwrap();
+				}
+			}
+			createSearchForm();
+        });
+    </script>
+
+</head>
+
+<body>
+
+</body>
+
+</html>
